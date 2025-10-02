@@ -24,7 +24,6 @@ const SuperQuoteCreator: React.FC<SuperQuoteCreatorProps> = ({
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [processingStage, setProcessingStage] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
   const [completedStages, setCompletedStages] = useState<string[]>([]);
   const processingStarted = useRef(false);
 
@@ -112,7 +111,6 @@ const SuperQuoteCreator: React.FC<SuperQuoteCreatorProps> = ({
   }, [step]);
 
   const processBlockchain = async () => {
-    setIsProcessing(true);
     setCompletedStages([]);
     const category = formData.category || aiAnalysis?.suggestedCategory || 'wisdom';
 
@@ -204,8 +202,6 @@ Please check:
       await delay(8000); // Give more time to read the error
       setStep('ai-analysis'); // Go back to previous step
       processingStarted.current = false;
-    } finally {
-      setIsProcessing(false);
     }
   };
 
