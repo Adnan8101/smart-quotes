@@ -109,18 +109,18 @@ export function QuoteApp() {
     setShowQuoteDetails(true);
   };
 
-  const handleGetAIInsights = async (quote: Quote) => {
-    try {
-      setError('');
-      setShowQuoteDetails(false); // Close details modal
-      // Get AI insights for the clicked quote
-      const aiResult = await pythonAIService.getQuoteInsights(quote);
-      setAiResponse(aiResult);
-      setShowAIModal(true);
-    } catch (err) {
-      setError(`Failed to get quote insights: ${err instanceof Error ? err.message : 'Unknown error'}`);
-    }
-  };
+  // const handleGetAIInsights = async (quote: Quote) => {
+  //   try {
+  //     setError('');
+  //     setShowQuoteDetails(false); // Close details modal
+  //     // Get AI insights for the clicked quote
+  //     const aiResult = await pythonAIService.getQuoteInsights(quote);
+  //     setAiResponse(aiResult);
+  //     setShowAIModal(true);
+  //   } catch (err) {
+  //     setError(`Failed to get quote insights: ${err instanceof Error ? err.message : 'Unknown error'}`);
+  //   }
+  // };
 
   const handleAddQuote = async () => {
     try {
