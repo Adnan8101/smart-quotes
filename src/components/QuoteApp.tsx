@@ -7,6 +7,7 @@ import { QuoteList } from './QuoteList';
 import { QuoteSearch } from './QuoteSearch';
 import { AddQuoteForm } from './AddQuoteForm';
 import AIInsightsModal from './AIInsightsModal';
+import { QuoteDetailsModal } from './QuoteDetailsModal';
 import { WalletConnection } from './WalletConnection';
 import SuperQuoteCreator from './SuperQuoteCreator';
 import Toast from './Toast';
@@ -27,6 +28,8 @@ export function QuoteApp() {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [toastDetails, setToastDetails] = useState<string>('');
   const [showAIModal, setShowAIModal] = useState<boolean>(false);
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [showQuoteDetails, setShowQuoteDetails] = useState<boolean>(false);
 
   // Subscribe to AI processing status updates
   useEffect(() => {
@@ -101,8 +104,15 @@ export function QuoteApp() {
   };
 
   const handleQuoteClick = async (quote: Quote) => {
+    // Show quote details modal
+    setSelectedQuote(quote);
+    setShowQuoteDetails(true);
+  };
+
+  const handleGetAIInsights = async (quote: Quote) => {
     try {
       setError('');
+      setShowQuoteDetails(false); // Close details modal
       // Get AI insights for the clicked quote
       const aiResult = await pythonAIService.getQuoteInsights(quote);
       setAiResponse(aiResult);
@@ -376,6 +386,18 @@ export function QuoteApp() {
           aiResponse={aiResponse}
           onClose={clearAIResponse}
           isOpen={showAIModal}
+        />
+      )}
+
+      {/* Quote Details Modal */}
+      {selectedQuote && (
+        <QuoteDetailsModal
+          quote={selectedQuote}
+          onClose={() => {
+            setShowQuoteDetails(false);
+            setSelectedQuote(null);
+          }}
+          isOpen={showQuoteDetails}
         />
       )}
 

@@ -508,7 +508,7 @@ src/
     └── deploy.js      # Contract deployment script
 ```
 
-## 🧠 How AI Integration Works
+## How AI Integration Works
 
 ### Quote Search
 1. User enters search keywords

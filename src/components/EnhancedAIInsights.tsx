@@ -37,7 +37,7 @@ export function EnhancedAIInsights({ aiResponse, onClose }: EnhancedAIInsightsPr
     <div className="enhanced-ai-insights glass-card">
       <div className="ai-insights-header">
         <div className="header-content">
-          <h3>🧠 AI Super Intelligence Analysis</h3>
+          <h3> AI Super Intelligence Analysis</h3>
           <div className="confidence-badge">
             <span className="confidence-label">Confidence:</span>
             <span className="confidence-value">{Math.round(confidence * 100)}%</span>

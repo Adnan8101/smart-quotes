@@ -64,7 +64,7 @@ export function AIInsightsModal({ aiResponse, onClose, isOpen }: AIInsightsModal
           {/* Modal Header */}
           <div className="modal-header">
             <div className="modal-title-section">
-              <h2 className="modal-title">🧠 AI Super Intelligence Analysis</h2>
+              <h2 className="modal-title">AI Super Intelligence Analysis</h2>
               <div className="confidence-indicator">
                 <span className="confidence-label">Confidence:</span>
                 <span className="confidence-value">{confidencePercent}%</span>

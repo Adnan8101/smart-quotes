@@ -437,7 +437,7 @@ if __name__ == '__main__':
     print("💡 Analyze: POST http://localhost:5001/api/analyze")
     print("🔍 Search: POST http://localhost:5001/api/find-quote")
     print("🎲 Random: POST http://localhost:5001/api/random-insight")
-    print("🧠 Insights: POST http://localhost:5001/api/quote-insights")
+    print(" Insights: POST http://localhost:5001/api/quote-insights")
     print("=" * 60)
     print("👥 Team: Adnan (67), Chirayu (68), Abdul (69), Ralph (9)")
     print("🎓 Mentor: Abhijeet Jhadhav")
