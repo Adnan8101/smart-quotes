@@ -1,0 +1,16 @@
+# AIB Quote Manager - Python Dependencies
+# AI Analysis Service Requirements
+
+# Web Framework
+flask==3.1.0
+flask-cors==5.0.0
+
+# Natural Language Processing
+nltk==3.9.1
+textblob==0.18.0.post0
+
+# HTTP Requests
+requests==2.32.3
+
+# Utilities
+python-dotenv==1.0.1
