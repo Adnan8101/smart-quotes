@@ -9,6 +9,7 @@ import { AddQuoteForm } from './AddQuoteForm';
 import EnhancedAIInsights from './EnhancedAIInsights';
 import { WalletConnection } from './WalletConnection';
 import SuperQuoteCreator from './SuperQuoteCreator';
+import Toast from './Toast';
 import { FaRocket, FaSync } from 'react-icons/fa';
 
 export function QuoteApp() {
@@ -22,6 +23,9 @@ export function QuoteApp() {
   const [showAddForm, setShowAddForm] = useState<boolean>(false);
   const [showSuperCreator, setShowSuperCreator] = useState<boolean>(false);
   const [aiStatus, setAiStatus] = useState<RealtimeStatus | null>(null);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastMessage, setToastMessage] = useState<string>('');
+  const [toastDetails, setToastDetails] = useState<string>('');
 
   // Subscribe to AI processing status updates
   useEffect(() => {
@@ -120,10 +124,15 @@ export function QuoteApp() {
     }
   };
 
-  const handleQuoteCreated = (newQuote: Quote) => {
+  const handleQuoteCreated = (newQuote: Quote, quoteText: string, author: string) => {
     setQuotes(prev => [...prev, newQuote]);
     setShowSuperCreator(false);
     setError('');
+    
+    // Show success toast notification
+    setToastMessage('🎉 Quote Created Successfully!');
+    setToastDetails(`"${quoteText.substring(0, 60)}${quoteText.length > 60 ? '...' : ''}" by ${author} has been permanently stored on the blockchain!`);
+    setShowToast(true);
   };
 
   const handleWalletConnected = (address: string) => {
@@ -369,6 +378,16 @@ export function QuoteApp() {
           </p>
         </div>
       </footer>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          details={toastDetails}
+          onClose={() => setShowToast(false)}
+          duration={6000}
+        />
+      )}
     </div>
   );
 }

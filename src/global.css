@@ -344,8 +344,12 @@ body {
 ============================================================================= */
 
 .quote-app-container {
-  max-width: 1400px;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Hero Section */
@@ -439,7 +443,8 @@ body {
   margin: 0 auto var(--space-10);
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 800px;
+  max-width: 900px;
+  width: 100%;
   padding: 0 var(--space-4);
 }
 
@@ -499,11 +504,13 @@ body {
 ============================================================================= */
 
 .main-content-grid {
-  display: grid;
-  grid-template-columns: 1fr 420px;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-8);
   margin: 0 auto var(--space-10);
-  max-width: 1400px;
+  max-width: 900px;
+  width: 100%;
+  align-items: center;
 }
 
 .content-left {
@@ -511,6 +518,8 @@ body {
   flex-direction: column;
   gap: var(--space-6);
   align-items: stretch;
+  width: 100%;
+  max-width: 900px;
 }
 
 .content-right {
@@ -518,6 +527,8 @@ body {
   flex-direction: column;
   gap: var(--space-6);
   align-items: stretch;
+  width: 100%;
+  max-width: 900px;
 }
 
 /* Centered Single Column Layout for Wallet & Search */
@@ -543,6 +554,10 @@ body {
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
   margin-bottom: var(--space-6);
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .premium-card::before {
@@ -824,6 +839,10 @@ button:disabled,
   border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-5);
   margin-bottom: var(--space-6);
+  max-width: 900px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .error-text {
@@ -1004,7 +1023,7 @@ button:disabled,
 
 @media (max-width: 1400px) {
   .main-content-grid {
-    grid-template-columns: 1fr 380px;
+    max-width: 850px;
     gap: var(--space-6);
   }
 }
@@ -1016,7 +1035,8 @@ button:disabled,
   }
   
   .main-content-grid {
-    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 0 var(--space-4);
   }
   
   .content-right {
@@ -2422,4 +2442,137 @@ button:disabled,
 
 /* =============================================================================
    END OF PREMIUM DOCUMENTATION STYLES
+============================================================================= */
+
+/* =============================================================================
+   TOAST NOTIFICATION SYSTEM
+============================================================================= */
+
+.toast-container {
+  position: fixed;
+  top: 100px;
+  right: var(--space-6);
+  z-index: var(--z-tooltip);
+  animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(400px);
+  }
+}
+
+.toast-content {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid #86efac;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: 0 20px 60px -10px rgba(34, 197, 94, 0.3), 
+              0 10px 40px -10px rgba(0, 0, 0, 0.1);
+  min-width: 380px;
+  max-width: 500px;
+  backdrop-filter: blur(10px);
+}
+
+.toast-icon-wrapper {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px -5px rgba(34, 197, 94, 0.5);
+  animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toast-icon {
+  font-size: 1.75rem;
+  color: white;
+}
+
+.toast-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.toast-message {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: #166534;
+  line-height: 1.3;
+}
+
+.toast-details {
+  font-size: var(--text-sm);
+  color: #15803d;
+  line-height: var(--leading-relaxed);
+  margin-top: var(--space-1);
+}
+
+.toast-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-lg);
+  border: 1px solid #86efac;
+  background: white;
+  color: #16a34a;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  padding: 0;
+}
+
+.toast-close:hover {
+  background: #f0fdf4;
+  border-color: #22c55e;
+  transform: scale(1.05);
+}
+
+.toast-close:active {
+  transform: scale(0.95);
+}
+
+/* Toast Responsive */
+@media (max-width: 768px) {
+  .toast-container {
+    top: 80px;
+    right: var(--space-4);
+    left: var(--space-4);
+  }
+
+  .toast-content {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+/* =============================================================================
+   END OF TOAST NOTIFICATION SYSTEM
 ============================================================================= */
