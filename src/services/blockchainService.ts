@@ -32,14 +32,14 @@ export const NETWORKS: Record<string, NetworkConfig> = {
     icon: '🧪',
     blockExplorer: 'https://sepolia.etherscan.io'
   },
-  POLYGON_MUMBAI: {
-    chainId: '0x13881', // 80001 in hex
-    chainName: 'Polygon Mumbai',
-    rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+  POLYGON_AMOY: {
+    chainId: '0x13882', // 80002 in hex
+    chainName: 'Polygon Amoy Testnet',
+    rpcUrl: 'https://rpc-amoy.polygon.technology',
     nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
     isFree: true,
     icon: '🟣',
-    blockExplorer: 'https://mumbai.polygonscan.com'
+    blockExplorer: 'https://amoy.polygonscan.com'
   }
 };
 

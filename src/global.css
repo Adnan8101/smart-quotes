@@ -736,6 +736,28 @@ button:disabled,
   padding: var(--space-6);
   transition: all var(--transition-normal);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-card::after {
+  content: ' Click to view details';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--black);
+  color: white;
+  padding: var(--space-2);
+  text-align: center;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  transform: translateY(100%);
+  transition: transform var(--transition-normal);
+}
+
+.quote-card:hover::after {
+  transform: translateY(0);
 }
 
 .quote-card::before {
@@ -744,7 +766,8 @@ button:disabled,
 
 .quote-card:hover {
   border-color: var(--black);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
 }
 
 .quote-text {

@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { Quote } from '../services/blockchainService';
+import QuoteDetails from './QuoteDetails';
 
 interface QuoteListProps {
   quotes: Quote[];
@@ -7,6 +9,7 @@ interface QuoteListProps {
 }
 
 export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps) {
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   if (loading) {
     return (
       <div className="quote-list">
@@ -45,6 +48,8 @@ export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps)
           <div 
             key={quote.id} 
             className={`quote-card ${highlightedQuote?.id === quote.id ? 'highlighted' : ''}`}
+            onClick={() => setSelectedQuote(quote)}
+            style={{ cursor: 'pointer' }}
           >
             <div className="quote-content">
               <blockquote>"{quote.text}"</blockquote>
@@ -65,6 +70,13 @@ export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps)
           </div>
         ))}
       </div>
+
+      {selectedQuote && (
+        <QuoteDetails 
+          quote={selectedQuote} 
+          onClose={() => setSelectedQuote(null)} 
+        />
+      )}
     </div>
   );
 }

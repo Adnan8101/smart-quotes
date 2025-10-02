@@ -27,7 +27,6 @@ export function QuoteApp() {
   const [toastMessage, setToastMessage] = useState<string>('');
   const [toastDetails, setToastDetails] = useState<string>('');
 
-  // Subscribe to AI processing status updates
   useEffect(() => {
     pythonAIService.onStatusUpdate((status: RealtimeStatus) => {
       setAiStatus(status);

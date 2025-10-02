@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QuoteApp } from './components/QuoteApp';
 import Documentation from './components/Documentation';
+import VivaExplanation from './components/VivaExplanation';
 import { NetworkWarning } from './components/NetworkWarning';
 import { FaEthereum, FaBook } from 'react-icons/fa';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'app' | 'docs'>('app');
+  const [showVivaPage, setShowVivaPage] = useState(false);
+
+  // Check if URL is /explain
+  useEffect(() => {
+    if (window.location.pathname === '/explain') {
+      setShowVivaPage(true);
+    }
+  }, []);
+
+  // If /explain route, show only the viva page
+  if (showVivaPage) {
+    return <VivaExplanation />;
+  }
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {

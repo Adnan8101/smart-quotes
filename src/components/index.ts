@@ -7,4 +7,6 @@ export { WalletConnection } from './WalletConnection';
 export { NetworkSelector } from './NetworkSelector';
 export { NetworkWarning } from './NetworkWarning';
 export { default as Documentation } from './Documentation';
+export { default as VivaExplanation } from './VivaExplanation';
 export { default as Toast } from './Toast';
+export { default as QuoteDetails } from './QuoteDetails';

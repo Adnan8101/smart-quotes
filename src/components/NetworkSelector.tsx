@@ -139,14 +139,69 @@ export function NetworkSelector({ onNetworkSelected, onCancel }: NetworkSelector
                     {network.isFree ? '✅ 100% FREE - NO REAL MONEY' : '💰 COSTS REAL MONEY'}
                   </div>
                   {network.isFree && (
-                    <div style={{
-                      fontSize: 'var(--text-xs)',
-                      color: '#059669',
-                      fontWeight: 'var(--font-semibold)',
-                      fontStyle: 'italic'
-                    }}>
-                      MetaMask will show gas fees, but you're using test tokens!
-                    </div>
+                    <>
+                      <div style={{
+                        fontSize: 'var(--text-xs)',
+                        color: '#059669',
+                        fontWeight: 'var(--font-semibold)',
+                        fontStyle: 'italic',
+                        marginBottom: 'var(--space-2)'
+                      }}>
+                        MetaMask will show gas fees, but you're using test tokens!
+                      </div>
+                      {network.key === 'SEPOLIA' && (
+                        <div style={{
+                          marginTop: 'var(--space-2)',
+                          padding: 'var(--space-2)',
+                          background: '#fef3c7',
+                          borderRadius: 'var(--radius-md)',
+                          fontSize: 'var(--text-xs)'
+                        }}>
+                          <strong style={{ color: '#92400e' }}>Need test ETH?</strong>
+                          <br />
+                          <a 
+                            href="https://sepoliafaucet.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{ color: '#0ea5e9', textDecoration: 'underline', fontWeight: 'var(--font-semibold)' }}
+                          >
+                            Get free Sepolia ETH →
+                          </a>
+                        </div>
+                      )}
+                      {network.key === 'POLYGON_AMOY' && (
+                        <div style={{
+                          marginTop: 'var(--space-2)',
+                          padding: 'var(--space-2)',
+                          background: '#fef3c7',
+                          borderRadius: 'var(--radius-md)',
+                          fontSize: 'var(--text-xs)'
+                        }}>
+                          <strong style={{ color: '#92400e' }}>Need test MATIC?</strong>
+                          <br />
+                          <a 
+                            href="https://faucet.polygon.technology" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{ color: '#0ea5e9', textDecoration: 'underline', fontWeight: 'var(--font-semibold)' }}
+                          >
+                            Get free Amoy MATIC →
+                          </a>
+                        </div>
+                      )}
+                      {network.key === 'HARDHAT_LOCAL' && (
+                        <div style={{
+                          marginTop: 'var(--space-2)',
+                          padding: 'var(--space-2)',
+                          background: '#dbeafe',
+                          borderRadius: 'var(--radius-md)',
+                          fontSize: 'var(--text-xs)',
+                          color: '#1e40af'
+                        }}>
+                          ⚡ <strong>Instant & Free!</strong> Pre-loaded with 10,000 ETH
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
                 {selectedNetwork === network.key && (
@@ -166,6 +221,35 @@ export function NetworkSelector({ onNetworkSelected, onCancel }: NetworkSelector
           }}>
             <strong>Note:</strong> Make sure you have the selected network configured in MetaMask. 
             The system will automatically add it if it's not available.
+          </div>
+
+          <div style={{
+            marginTop: 'var(--space-4)',
+            padding: 'var(--space-4)',
+            background: 'linear-gradient(135deg, #667eea15, #764ba215)',
+            border: '2px solid #667eea',
+            borderRadius: 'var(--radius-lg)',
+            fontSize: 'var(--text-sm)',
+            color: 'var(--black)'
+          }}>
+            <div style={{ fontWeight: 'var(--font-bold)', marginBottom: 'var(--space-2)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+              <span style={{ fontSize: 'var(--text-lg)' }}>📍</span>
+              Where Are Your Quotes Stored?
+            </div>
+            <ul style={{ margin: 0, paddingLeft: 'var(--space-5)', fontSize: 'var(--text-xs)', lineHeight: '1.6' }}>
+              <li style={{ marginBottom: 'var(--space-2)' }}>
+                <strong>Hardhat Local:</strong> Stored on your computer (localhost:8545) - Resets when you restart the node
+              </li>
+              <li style={{ marginBottom: 'var(--space-2)' }}>
+                <strong>Sepolia Testnet:</strong> Stored on Ethereum Sepolia public testnet - Permanent & viewable on <a href="https://sepolia.etherscan.io" target="_blank" rel="noopener noreferrer" style={{ color: '#667eea', textDecoration: 'underline' }}>Sepolia Etherscan</a>
+              </li>
+              <li style={{ marginBottom: 'var(--space-2)' }}>
+                <strong>Polygon Amoy:</strong> Stored on Polygon Amoy testnet - Permanent & viewable on <a href="https://amoy.polygonscan.com" target="_blank" rel="noopener noreferrer" style={{ color: '#667eea', textDecoration: 'underline' }}>Amoy PolygonScan</a>
+              </li>
+              <li>
+                💡 After deployment, check <code style={{ background: '#f5f5f5', padding: '2px 6px', borderRadius: '4px', fontSize: 'var(--text-xs)' }}>src/contract-address.json</code> for your contract address
+              </li>
+            </ul>
           </div>
         </div>
 
