@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaSearch, FaDice, FaTimes, FaLightbulb, FaBrain } from 'react-icons/fa';
 
 interface QuoteSearchProps {
   onSearch: (keywords: string) => void;
@@ -38,7 +39,10 @@ export function QuoteSearch({ onSearch, onRandomQuote, onClearSearch }: QuoteSea
 
   return (
     <div className="quote-search">
-      <h3>🤖 AI-Powered Search</h3>
+      <div className="search-header">
+        <FaBrain className="search-icon" />
+        <h3>AI-Powered Search</h3>
+      </div>
       
       <form onSubmit={handleSearch} className="search-form">
         <div className="search-input-group">
@@ -55,7 +59,8 @@ export function QuoteSearch({ onSearch, onRandomQuote, onClearSearch }: QuoteSea
             className="btn btn-primary"
             disabled={!searchKeywords.trim() || isSearching}
           >
-            {isSearching ? '🔍' : 'Search'}
+            <FaSearch />
+            <span>{isSearching ? 'Searching...' : 'Search'}</span>
           </button>
         </div>
       </form>
@@ -66,7 +71,8 @@ export function QuoteSearch({ onSearch, onRandomQuote, onClearSearch }: QuoteSea
           onClick={handleRandomQuote}
           disabled={isSearching}
         >
-          🎲 Random Quote + AI Insight
+          <FaDice />
+          <span>Random Quote</span>
         </button>
         
         <button 
@@ -74,34 +80,42 @@ export function QuoteSearch({ onSearch, onRandomQuote, onClearSearch }: QuoteSea
           onClick={handleClear}
           disabled={isSearching}
         >
-          Clear
+          <FaTimes />
+          <span>Clear</span>
         </button>
       </div>
 
       <div className="search-help">
-        <p>💡 Try searching for:</p>
+        <div className="search-help-header">
+          <FaLightbulb className="help-icon" />
+          <p>Try searching for:</p>
+        </div>
         <div className="search-examples">
           <button 
             className="example-tag" 
             onClick={() => setSearchKeywords('motivation')}
+            disabled={isSearching}
           >
             motivation
           </button>
           <button 
             className="example-tag" 
             onClick={() => setSearchKeywords('life wisdom')}
+            disabled={isSearching}
           >
             life wisdom
           </button>
           <button 
             className="example-tag" 
             onClick={() => setSearchKeywords('success')}
+            disabled={isSearching}
           >
             success
           </button>
           <button 
             className="example-tag" 
             onClick={() => setSearchKeywords('inspiration')}
+            disabled={isSearching}
           >
             inspiration
           </button>

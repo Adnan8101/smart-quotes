@@ -4,9 +4,10 @@ interface QuoteListProps {
   quotes: Quote[];
   loading: boolean;
   highlightedQuote?: Quote;
+  onQuoteClick?: (quote: Quote) => void;
 }
 
-export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps) {
+export function QuoteList({ quotes, loading, highlightedQuote, onQuoteClick }: QuoteListProps) {
   if (loading) {
     return (
       <div className="quote-list">
@@ -44,7 +45,8 @@ export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps)
         {quotes.map((quote) => (
           <div 
             key={quote.id} 
-            className={`quote-card ${highlightedQuote?.id === quote.id ? 'highlighted' : ''}`}
+            className={`quote-card ${highlightedQuote?.id === quote.id ? 'highlighted' : ''} ${onQuoteClick ? 'clickable' : ''}`}
+            onClick={() => onQuoteClick?.(quote)}
           >
             <div className="quote-content">
               <blockquote>"{quote.text}"</blockquote>
@@ -62,6 +64,12 @@ export function QuoteList({ quotes, loading, highlightedQuote }: QuoteListProps)
               </span>
               <span className="quote-id">#{quote.id}</span>
             </div>
+            
+            {onQuoteClick && (
+              <div className="quote-click-hint">
+                <span className="click-hint-text">Click for AI insights !</span>
+              </div>
+            )}
           </div>
         ))}
       </div>

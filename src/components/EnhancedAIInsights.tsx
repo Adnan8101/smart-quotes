@@ -165,15 +165,15 @@ export function EnhancedAIInsights({ aiResponse, onClose }: EnhancedAIInsightsPr
 
         {/* AI Model Information */}
         <div className="ai-model-info">
-          <h4>🤖 AI Model Information</h4>
+          <h4> AI Model Information</h4>
           <div className="model-stats">
             <div className="model-stat">
               <span className="stat-label">Model:</span>
-              <span className="stat-value">AIB-v2.0-SuperPower</span>
+              <span className="stat-value">Adeen Superfast Model</span>
             </div>
             <div className="model-stat">
               <span className="stat-label">Processing Speed:</span>
-              <span className="stat-value">Ultra-Fast ⚡</span>
+              <span className="stat-value">Fast ⚡</span>
             </div>
             <div className="model-stat">
               <span className="stat-label">Accuracy:</span>

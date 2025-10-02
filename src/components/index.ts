@@ -3,6 +3,7 @@ export { QuoteList } from './QuoteList';
 export { QuoteSearch } from './QuoteSearch';
 export { AddQuoteForm } from './AddQuoteForm';
 export { default as AIInsights } from './EnhancedAIInsights';
+export { default as AIInsightsModal } from './AIInsightsModal';
 export { WalletConnection } from './WalletConnection';
 export { NetworkSelector } from './NetworkSelector';
 export { NetworkWarning } from './NetworkWarning';

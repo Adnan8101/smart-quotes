@@ -387,6 +387,147 @@ def random_quote():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/find-quote', methods=['POST'])
+def find_best_quote():
+    """Find the best matching quote based on keywords"""
+    try:
+        data = request.get_json()
+        query = data.get('query', '').lower()
+        quotes = data.get('quotes', [])
+        
+        if not query:
+            return jsonify({'error': 'Query is required'}), 400
+        
+        if not quotes:
+            return jsonify({'error': 'No quotes available'}), 400
+        
+        # Score each quote based on keyword matching
+        scored_quotes = []
+        query_words = set(re.findall(r'\w+', query.lower()))
+        
+        for quote in quotes:
+            text_words = set(re.findall(r'\w+', quote['text'].lower()))
+            author_words = set(re.findall(r'\w+', quote['author'].lower()))
+            category_words = set(re.findall(r'\w+', quote['category'].lower()))
+            
+            # Calculate match score
+            text_matches = len(query_words & text_words)
+            author_matches = len(query_words & author_words) * 2  # Author matches weighted more
+            category_matches = len(query_words & category_words) * 1.5
+            
+            total_score = text_matches + author_matches + category_matches
+            
+            if total_score > 0:
+                scored_quotes.append({
+                    'quote': quote,
+                    'score': total_score
+                })
+        
+        if scored_quotes:
+            # Sort by score and get the best match
+            scored_quotes.sort(key=lambda x: x['score'], reverse=True)
+            best_match = scored_quotes[0]
+            
+            # Analyze the selected quote
+            analysis = analyzer.analyze_quote(best_match['quote']['text'], best_match['quote']['author'])
+            
+            confidence = min(0.95, 0.5 + (best_match['score'] / 20))
+            
+            return jsonify({
+                'selectedQuote': best_match['quote'],
+                'explanation': f'Found a great {analysis["category"]} quote that matches your search with {analysis["sentiment"]} sentiment.',
+                'confidence': confidence,
+                'matchScore': best_match['score']
+            })
+        else:
+            # No matches, return random quote
+            import random
+            random_quote = random.choice(quotes)
+            analysis = analyzer.analyze_quote(random_quote['text'], random_quote['author'])
+            
+            return jsonify({
+                'selectedQuote': random_quote,
+                'explanation': 'No exact matches found. Here\'s an inspiring quote from your collection.',
+                'confidence': 0.5,
+                'matchScore': 0
+            })
+    
+    except Exception as e:
+        logger.error(f"Find quote error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/random-insight', methods=['POST'])
+def random_insight():
+    """Get a random quote with detailed AI insights"""
+    try:
+        data = request.get_json()
+        quotes = data.get('quotes', [])
+        
+        if not quotes:
+            return jsonify({'error': 'No quotes available'}), 400
+        
+        import random
+        selected = random.choice(quotes)
+        
+        # Analyze the selected quote
+        analysis = analyzer.analyze_quote(selected['text'], selected['author'])
+        
+        return jsonify({
+            'selectedQuote': selected,
+            'explanation': f'Randomly selected this inspiring {analysis["category"]} quote. {analysis["insights"][0] if analysis["insights"] else "Enjoy this wisdom!"}',
+            'confidence': 0.85
+        })
+    
+    except Exception as e:
+        logger.error(f"Random insight error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/quote-insights', methods=['POST'])
+def quote_insights():
+    """Get detailed AI insights for a specific quote"""
+    try:
+        data = request.get_json()
+        quote = data.get('quote')
+        
+        if not quote:
+            return jsonify({'error': 'Quote is required'}), 400
+        
+        # Analyze the quote
+        analysis = analyzer.analyze_quote(quote['text'], quote['author'])
+        
+        # Create detailed insights
+        insights_text = []
+        
+        # Add sentiment-based insight
+        if analysis['sentiment'] == 'positive':
+            insights_text.append('This quote radiates positivity and encouragement.')
+        elif analysis['sentiment'] == 'negative':
+            insights_text.append('This quote addresses challenging themes with depth.')
+        else:
+            insights_text.append('This quote offers balanced perspective.')
+        
+        # Add category-based insight
+        insights_text.append(f'Categorized as {analysis["category"]} - perfect for that context.')
+        
+        # Add confidence-based insight
+        if analysis['confidence'] > 80:
+            insights_text.append('Our AI model is highly confident in this analysis.')
+        
+        explanation = f'This {analysis["category"]} quote by {quote["author"]} shows {analysis["sentiment"]} sentiment. ' + ' '.join(insights_text[:2])
+        
+        return jsonify({
+            'selectedQuote': quote,
+            'explanation': explanation,
+            'confidence': analysis['confidence'] / 100
+        })
+    
+    except Exception as e:
+        logger.error(f"Quote insights error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
 # ==================== MAIN ====================
 
 if __name__ == '__main__':
@@ -394,12 +535,15 @@ if __name__ == '__main__':
     print("🤖 AI Blockchain Quote Manager - Python AI Server")
     print("="*60)
     print("✅ Server Status: READY")
-    print("🌐 Server URL: http://localhost:5002")
+    print("🌐 Server URL: http://localhost:5001")
     print("📚 API Endpoints:")
-    print("   - GET  /api/health   - Health check")
-    print("   - POST /api/analyze  - Analyze quote")
-    print("   - POST /api/search   - Search quotes")
-    print("   - POST /api/random   - Random quote")
+    print("   - GET  /api/health         - Health check")
+    print("   - POST /api/analyze        - Analyze quote")
+    print("   - POST /api/search         - Search quotes")
+    print("   - POST /api/random         - Random quote")
+    print("   - POST /api/find-quote     - Find best matching quote")
+    print("   - POST /api/random-insight - Random quote with insights")
+    print("   - POST /api/quote-insights - Get insights for specific quote")
     print("\n💡 Features:")
     print("   - Sentiment Analysis (TextBlob)")
     print("   - Category Classification")

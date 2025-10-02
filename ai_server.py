@@ -351,7 +351,61 @@ def random_insight():
         result = {
             'selectedQuote': selected_quote,
             'analysis': analysis,
-            'explanation': f"Here's an inspiring {selected_quote.get('category', 'quote')} for you!"
+            'explanation': f"Here's an inspiring {selected_quote.get('category', 'quote')} for you!",
+            'confidence': 0.85
+        }
+        
+        return jsonify(result)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/quote-insights', methods=['POST'])
+def quote_insights():
+    """Get detailed AI insights for a specific quote"""
+    try:
+        data = request.get_json()
+        quote = data.get('quote')
+        
+        if not quote:
+            return jsonify({'error': 'Quote object is required'}), 400
+        
+        text = quote.get('text', '')
+        author = quote.get('author', 'Unknown')
+        
+        if not text:
+            return jsonify({'error': 'Quote text is required'}), 400
+        
+        # Analyze the quote
+        sentiment_data = analyze_sentiment(text)
+        keywords = extract_keywords(text)
+        category, category_confidence = classify_category(text, keywords)
+        insights, recommendations = generate_insights(text, sentiment_data, category, keywords)
+        
+        # Create detailed explanation
+        sentiment_desc = {
+            'positive': 'radiates positivity and encouragement',
+            'negative': 'addresses challenging themes with depth',
+            'neutral': 'offers balanced perspective'
+        }
+        
+        explanation = f"This {category} quote by {author} {sentiment_desc.get(sentiment_data['sentiment'], 'provides insight')}. "
+        
+        if insights:
+            explanation += insights[0]
+        
+        result = {
+            'selectedQuote': quote,
+            'explanation': explanation,
+            'confidence': category_confidence,
+            'analysis': {
+                'sentiment': sentiment_data['sentiment'],
+                'sentimentEmoji': sentiment_data['emoji'],
+                'category': category,
+                'insights': insights,
+                'recommendations': recommendations,
+                'keywords': keywords
+            }
         }
         
         return jsonify(result)
@@ -382,6 +436,8 @@ if __name__ == '__main__':
     print("🏥 Health: http://localhost:5001/api/health")
     print("💡 Analyze: POST http://localhost:5001/api/analyze")
     print("🔍 Search: POST http://localhost:5001/api/find-quote")
+    print("🎲 Random: POST http://localhost:5001/api/random-insight")
+    print("🧠 Insights: POST http://localhost:5001/api/quote-insights")
     print("=" * 60)
     print("👥 Team: Adnan (67), Chirayu (68), Abdul (69), Ralph (9)")
     print("🎓 Mentor: Abhijeet Jhadhav")

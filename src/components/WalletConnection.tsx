@@ -145,7 +145,7 @@ export function WalletConnection({ onWalletConnected }: WalletConnectionProps) {
       {walletAddress ? (
         <div className="wallet-connected">
           <div className="wallet-info">
-            <span className="wallet-icon">🟢</span>
+            <span className="wallet-icon"></span>
             <span className="wallet-address">{formatAddress(walletAddress)}</span>
             <span style={{ 
               fontSize: 'var(--text-xs)', 

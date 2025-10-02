@@ -6,11 +6,11 @@ import type { QuoteSearchResult, RealtimeStatus } from '../services/pythonAIServ
 import { QuoteList } from './QuoteList';
 import { QuoteSearch } from './QuoteSearch';
 import { AddQuoteForm } from './AddQuoteForm';
-import EnhancedAIInsights from './EnhancedAIInsights';
+import AIInsightsModal from './AIInsightsModal';
 import { WalletConnection } from './WalletConnection';
 import SuperQuoteCreator from './SuperQuoteCreator';
 import Toast from './Toast';
-import { FaRocket, FaSync } from 'react-icons/fa';
+import { FaRocket, FaSync, FaGithub, FaReact, FaEthereum, FaPython } from 'react-icons/fa';
 
 export function QuoteApp() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -26,6 +26,7 @@ export function QuoteApp() {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string>('');
   const [toastDetails, setToastDetails] = useState<string>('');
+  const [showAIModal, setShowAIModal] = useState<boolean>(false);
 
   // Subscribe to AI processing status updates
   useEffect(() => {
@@ -73,6 +74,7 @@ export function QuoteApp() {
       setError('');
       const aiResult = await pythonAIService.findBestQuote(keywords, quotes);
       setAiResponse(aiResult);
+      setShowAIModal(true);
       
       if (aiResult.selectedQuote) {
         // Highlight the selected quote in the list
@@ -88,12 +90,25 @@ export function QuoteApp() {
       setError('');
       const aiResult = await pythonAIService.getRandomQuoteWithInsight(quotes);
       setAiResponse(aiResult);
+      setShowAIModal(true);
       
       if (aiResult.selectedQuote) {
         setFilteredQuotes([aiResult.selectedQuote]);
       }
     } catch (err) {
       setError(`Failed to get random quote: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleQuoteClick = async (quote: Quote) => {
+    try {
+      setError('');
+      // Get AI insights for the clicked quote
+      const aiResult = await pythonAIService.getQuoteInsights(quote);
+      setAiResponse(aiResult);
+      setShowAIModal(true);
+    } catch (err) {
+      setError(`Failed to get quote insights: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 
@@ -142,6 +157,7 @@ export function QuoteApp() {
   const clearAIResponse = () => {
     setAiResponse(null);
     setAiStatus(null);
+    setShowAIModal(false);
     filterQuotes(); // Reset to show all filtered quotes
   };
 
@@ -244,7 +260,7 @@ export function QuoteApp() {
           <div className="premium-card">
             <div className="card-header">
               <div className="card-title">
-                <span className="card-icon">🔗</span>
+                <span className="card-icon"></span>
                 Wallet Connection
               </div>
             </div>
@@ -311,25 +327,20 @@ export function QuoteApp() {
         </div>
 
         <div className="content-right">
-          {/* AI Insights Card */}
-          {aiResponse && (
+          {/* Quick Info Card - Shown when no AI response */}
+          {!aiResponse && (
             <div className="premium-card">
               <div className="card-header">
                 <div className="card-title">
-                  <span className="card-icon">🧠</span>
-                  AI Insights
+                  <span className="card-icon">💡</span>
+                  Quick Tips
                 </div>
-                <button 
-                  className="quick-action-btn"
-                  onClick={clearAIResponse}
-                >
-                  ✕
-                </button>
               </div>
-              <EnhancedAIInsights 
-                aiResponse={aiResponse}
-                onClose={clearAIResponse}
-              />
+              <div className="tips-content">
+                <p className="tip-item"> Click any quote to get AI insights</p>
+                <p className="tip-item"> Use AI search to find the perfect quote</p>
+                <p className="tip-item"> Try the random quote feature</p>
+              </div>
             </div>
           )}
         </div>
@@ -339,7 +350,7 @@ export function QuoteApp() {
       <div className="premium-card">
         <div className="card-header">
           <div className="card-title">
-            <span className="card-icon">📜</span>
+            <span className="card-icon"></span>
             Quote Collection ({filteredQuotes.length})
           </div>
         </div>
@@ -354,9 +365,19 @@ export function QuoteApp() {
             quotes={filteredQuotes}
             loading={loading}
             highlightedQuote={aiResponse?.selectedQuote || undefined}
+            onQuoteClick={handleQuoteClick}
           />
         )}
       </div>
+
+      {/* AI Insights Modal */}
+      {aiResponse && (
+        <AIInsightsModal
+          aiResponse={aiResponse}
+          onClose={clearAIResponse}
+          isOpen={showAIModal}
+        />
+      )}
 
       {/* Super Quote Creator Modal */}
       {showSuperCreator && (
@@ -367,15 +388,35 @@ export function QuoteApp() {
         />
       )}
 
-      {/* Premium Footer */}
-      <footer className="premium-card" style={{ marginTop: 'var(--space-8)', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
-          <p style={{ color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-            Built with React, TypeScript, Solidity, Hardhat & Custom AI
-          </p>
-          <p style={{ color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-            Connected: {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : 'Not connected'}
-          </p>
+      {/* Detailed Footer */}
+      <footer className="doc-footer" style={{ marginTop: 'var(--space-12)' }}>
+        <h3 className="footer-title">AIB Quote Manager</h3>
+        <p className="footer-subtitle">Next-Generation Blockchain Quote Platform</p>
+        <p className="footer-team">
+          Built with ❤️ by Team AIB
+        </p>
+        <p className="footer-team">
+          <strong>Adnan Qureshi (67)</strong> • <strong>Chirayu Giri (68)</strong> • <strong>Abdul Adeen (69)</strong> • <strong>Ralph Gonsalves (9)</strong>
+        </p>
+        <p className="footer-team" style={{ marginTop: '0.5rem', fontSize: '0.9rem', opacity: 0.8 }}>
+          Project Mentor: <strong>Abhijeet Jhadhav</strong>
+        </p>
+        <p className="footer-copyright">
+          © {new Date().getFullYear()} All Rights Reserved
+        </p>
+        <div className="tech-stack" style={{ marginTop: '1.5rem' }}>
+          <a 
+            href="https://github.com/Adnan8101/smart-quotes" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="tech-badge"
+            style={{ textDecoration: 'none' }}
+          >
+            <FaGithub /> Open Source
+          </a>
+          <div className="tech-badge"><FaReact /> React</div>
+          <div className="tech-badge"><FaEthereum /> Ethereum</div>
+          <div className="tech-badge"><FaPython /> Python AI</div>
         </div>
       </footer>
 

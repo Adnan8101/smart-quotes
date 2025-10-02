@@ -203,6 +203,58 @@ class PythonAIService {
   }
 
   /**
+   * Get AI insights for a specific quote
+   */
+  async getQuoteInsights(quote: Quote): Promise<QuoteSearchResult> {
+    try {
+      this.notifyStatus({
+        processing: true,
+        stage: 'Analyzing',
+        progress: 50,
+        message: 'Getting AI insights...'
+      });
+
+      const response = await fetch(`${AI_API_URL}/quote-insights`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quote }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Quote insights failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      this.notifyStatus({
+        processing: false,
+        stage: 'Complete',
+        progress: 100,
+        message: 'Insights generated!'
+      });
+
+      return data;
+    } catch (error) {
+      this.notifyStatus({
+        processing: false,
+        stage: 'Error',
+        progress: 0,
+        message: 'Failed to get insights'
+      });
+      
+      console.error('Quote insights error:', error);
+      // Fallback to local analysis if backend is not available
+      return {
+        selectedQuote: quote,
+        explanation: `This inspiring ${quote.category} quote by ${quote.author} offers valuable wisdom and perspective.`,
+        confidence: 0.85
+      };
+    }
+  }
+
+  /**
    * Subscribe to status updates
    */
   onStatusUpdate(callback: (status: RealtimeStatus) => void) {
