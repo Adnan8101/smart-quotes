@@ -1,4 +1,8 @@
 import type { QuoteSearchResult } from '../services/pythonAIService';
+import { useState } from 'react';
+import { FaCube } from 'react-icons/fa';
+import BlockchainDiagram from './BlockchainDiagram';
+import './BlockchainAction.css';
 
 interface EnhancedAIInsightsProps {
   aiResponse: QuoteSearchResult;
@@ -6,6 +10,8 @@ interface EnhancedAIInsightsProps {
 }
 
 export function EnhancedAIInsights({ aiResponse, onClose }: EnhancedAIInsightsProps) {
+  const [showBlockchainDiagram, setShowBlockchainDiagram] = useState(false);
+  
   if (!aiResponse) return null;
 
   const { selectedQuote, explanation, confidence } = aiResponse;
@@ -181,7 +187,34 @@ export function EnhancedAIInsights({ aiResponse, onClose }: EnhancedAIInsightsPr
             </div>
           </div>
         </div>
+
+        {/* Blockchain Analysis Action */}
+        {selectedQuote && (
+          <div className="blockchain-action-section">
+            <h4>🔗 Blockchain Analysis</h4>
+            <p className="blockchain-description">
+              View the complete blockchain transaction details and security analysis for this quote.
+            </p>
+            <button 
+              className="blockchain-diagram-btn"
+              onClick={() => setShowBlockchainDiagram(true)}
+            >
+              <FaCube />
+              <span>Open Blockchain Diagram</span>
+              <span className="btn-badge">Professional</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Blockchain Diagram Modal */}
+      {showBlockchainDiagram && selectedQuote && (
+        <BlockchainDiagram
+          quote={selectedQuote}
+          onClose={() => setShowBlockchainDiagram(false)}
+          isOpen={showBlockchainDiagram}
+        />
+      )}
     </div>
   );
 }

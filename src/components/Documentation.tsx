@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './documentation.css';
 import { 
   FaRocket, FaUsers, FaBolt, FaLock, FaPalette, FaServer, 
   FaPython, FaReact, FaEthereum, FaTools, FaCheckCircle,
   FaWallet, FaBrain, FaGithub, FaCog, FaBook
 } from 'react-icons/fa';
-import { MdSpeed, MdSecurity } from 'react-icons/md';
+import { MdSpeed, MdSecurity, MdContentCopy } from 'react-icons/md';
 import { BiSolidBrain } from 'react-icons/bi';
 import { HiSparkles } from 'react-icons/hi';
+import Toast from './Toast';
 
 const Documentation: React.FC = () => {
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastDetails, setToastDetails] = useState('');
+
+  const copyToClipboard = (text: string, commandType: string = 'Command') => {
+    navigator.clipboard.writeText(text).then(() => {
+      setToastMessage(' Copied Successfully!');
+      setToastDetails(`${commandType} copied to clipboard and ready to paste`);
+      setShowToast(true);
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+      setToastMessage(' Copy Failed');
+      setToastDetails('Please try copying manually');
+      setShowToast(true);
+    });
+  };
+
   return (
     <div className="documentation-container">
       {/* Header */}
@@ -54,6 +72,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">Terminal</span>
                   <code>npm install && pip install -r requirements.txt</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('npm install && pip install -r requirements.txt', 'Install command')}
+                    title="Copy command"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
 
@@ -66,6 +91,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">Terminal 1</span>
                   <code>npx hardhat node</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('npx hardhat node', 'Hardhat command')}
+                    title="Copy command"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
 
@@ -78,6 +110,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">Terminal 2</span>
                   <code>npx hardhat run scripts/deploy.js --network localhost</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('npx hardhat run scripts/deploy.js --network localhost', 'Deploy command')}
+                    title="Copy command"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
 
@@ -90,6 +129,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">Terminal 3</span>
                   <code>python3 ai_server.py</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('python3 ai_server.py', 'Python AI command')}
+                    title="Copy command"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
 
@@ -102,6 +148,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">Terminal 4</span>
                   <code>npm run dev</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('npm run dev', 'Dev server command')}
+                    title="Copy command"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
 
@@ -114,6 +167,13 @@ const Documentation: React.FC = () => {
                 <div className="code-block">
                   <span className="code-label">MetaMask</span>
                   <code>0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80</code>
+                  <button 
+                    className="copy-btn" 
+                    onClick={() => copyToClipboard('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80', 'Private key')}
+                    title="Copy private key"
+                  >
+                    <MdContentCopy />
+                  </button>
                 </div>
               </div>
             </div>
@@ -662,6 +722,16 @@ updateQuote(id, text, author)          → Update quote (owner only)`}</code>
           </div>
         </footer>
       </div>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          details={toastDetails}
+          onClose={() => setShowToast(false)}
+          duration={3000}
+        />
+      )}
     </div>
   );
 };

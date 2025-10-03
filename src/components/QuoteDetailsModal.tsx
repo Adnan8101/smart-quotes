@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
 import { MdClose, MdContentCopy } from 'react-icons/md';
-import { FaQuoteLeft, FaUserAlt, FaTag, FaClock, FaEthereum, FaCheckCircle, FaHashtag } from 'react-icons/fa';
+import { FaQuoteLeft, FaUserAlt, FaTag, FaClock, FaEthereum, FaCheckCircle, FaHashtag, FaCube } from 'react-icons/fa';
 import type { Quote } from '../services/blockchainService';
 
 interface QuoteDetailsModalProps {
   quote: Quote;
   onClose: () => void;
+  onOpenBlockchainDiagram: (quote: Quote) => void;
   isOpen: boolean;
 }
 
-export function QuoteDetailsModal({ quote, onClose, isOpen }: QuoteDetailsModalProps) {
+export function QuoteDetailsModal({ quote, onClose, onOpenBlockchainDiagram, isOpen }: QuoteDetailsModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -242,6 +243,20 @@ export function QuoteDetailsModal({ quote, onClose, isOpen }: QuoteDetailsModalP
 
         {/* Footer */}
         <div className="modal-footer">
+          <button 
+            className="btn-modal-primary" 
+            onClick={() => onOpenBlockchainDiagram(quote)}
+            style={{ 
+              background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <FaCube />
+            View Blockchain Diagram
+          </button>
           <button className="btn-modal-secondary" onClick={onClose}>
             Close
           </button>

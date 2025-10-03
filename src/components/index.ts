@@ -10,3 +10,4 @@ export { NetworkSelector } from './NetworkSelector';
 export { NetworkWarning } from './NetworkWarning';
 export { default as Documentation } from './Documentation';
 export { default as Toast } from './Toast';
+export { default as BlockchainDiagram } from './BlockchainDiagram';

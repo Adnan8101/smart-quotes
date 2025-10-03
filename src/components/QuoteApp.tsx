@@ -8,6 +8,7 @@ import { QuoteSearch } from './QuoteSearch';
 import { AddQuoteForm } from './AddQuoteForm';
 import AIInsightsModal from './AIInsightsModal';
 import { QuoteDetailsModal } from './QuoteDetailsModal';
+import BlockchainDiagram from './BlockchainDiagram';
 import { WalletConnection } from './WalletConnection';
 import SuperQuoteCreator from './SuperQuoteCreator';
 import Toast from './Toast';
@@ -30,6 +31,8 @@ export function QuoteApp() {
   const [showAIModal, setShowAIModal] = useState<boolean>(false);
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [showQuoteDetails, setShowQuoteDetails] = useState<boolean>(false);
+  const [showBlockchainDiagram, setShowBlockchainDiagram] = useState<boolean>(false);
+  const [blockchainQuote, setBlockchainQuote] = useState<Quote | null>(null);
 
   // Subscribe to AI processing status updates
   useEffect(() => {
@@ -397,7 +400,25 @@ export function QuoteApp() {
             setShowQuoteDetails(false);
             setSelectedQuote(null);
           }}
+          onOpenBlockchainDiagram={(quote) => {
+            setBlockchainQuote(quote);
+            setShowBlockchainDiagram(true);
+            setShowQuoteDetails(false);
+            setSelectedQuote(null);
+          }}
           isOpen={showQuoteDetails}
+        />
+      )}
+
+      {/* Blockchain Diagram Modal */}
+      {showBlockchainDiagram && blockchainQuote && (
+        <BlockchainDiagram
+          quote={blockchainQuote}
+          onClose={() => {
+            setShowBlockchainDiagram(false);
+            setBlockchainQuote(null);
+          }}
+          isOpen={showBlockchainDiagram}
         />
       )}
 
